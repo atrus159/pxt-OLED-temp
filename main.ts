@@ -1,5 +1,6 @@
 namespace OLED {
-    
+
+    const SSD1306_COMMAND = 0x00
     const SSD1306_SETCONTRAST = 0x81
     const SSD1306_DISPLAYALLON_RESUME = 0xA4
     const SSD1306_DISPLAYALLON = 0xA5
@@ -22,12 +23,67 @@ namespace OLED {
     const SSD1306_SEGREMAP = 0xA0
     const SSD1306_CHARGEPUMP = 0x8D
 
-    function command(cmd: number){
-        
+    const chipAdress = 0x00
+
+    function command(cmd: number) {
+        let buf = pins.createBuffer(1)
+        sendStart(chipAdress << 1); // Start the communication and send the OLED ID/Address in write mode
+        buf[0] = SSD1306_COMMAND
+        pins.i2cWriteBuffer(chipAdress, buf, false )
+        buf[0] = cmd
+        pins.i2cWriteBuffer(chipAdress, buf, false)
+        sendStop();
+    }
+
+    function sendStart(adress: number){
+
+    }
+    function sendStop(){
+
     }
 
     export function init(width: number, height: number) {
-        let buf = pins.createBuffer(2)
+
+        
+        /*command(SSD1306_DISPLAYOFF);
+        command(SSD1306_SETDISPLAYCLOCKDIV);
+        command(0x80);                                  // the suggested ratio 0x80
+
+        command(SSD1306_SETMULTIPLEX);
+        command(_rawHeight - 1);
+
+        command(SSD1306_SETDISPLAYOFFSET);
+        command(0x0);                                   // no offset
+
+        command(SSD1306_SETSTARTLINE | 0x0);            // line #0
+
+        command(SSD1306_CHARGEPUMP);
+        command((vccstate == SSD1306_EXTERNALVCC) ? 0x10 : 0x14);
+
+        command(SSD1306_MEMORYMODE);
+        command(0x00);                                  // 0x0 act like ks0108
+
+        command(SSD1306_SEGREMAP | 0x1);
+
+        command(SSD1306_COMSCANDEC);
+
+        command(SSD1306_SETCOMPINS);
+        command(_rawHeight == 32 ? 0x02 : 0x12);        // TODO - calculate based on _rawHieght ?
+
+        command(SSD1306_SETCONTRAST);
+        command(_rawHeight == 32 ? 0x8F : ((vccstate == SSD1306_EXTERNALVCC) ? 0x9F : 0xCF));
+
+        command(SSD1306_SETPRECHARGE);
+        command((vccstate == SSD1306_EXTERNALVCC) ? 0x22 : 0xF1);
+
+        command(SSD1306_SETVCOMDETECT);
+        command(0x40);
+
+        command(SSD1306_DISPLAYALLON_RESUME);
+
+        command(SSD1306_NORMALDISPLAY);
+
+        command(SSD1306_DISPLAYON);*/
 
     }
 } 
