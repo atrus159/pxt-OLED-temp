@@ -28,6 +28,8 @@ namespace OLED {
 
     let charX = xOffset
     let charY = yOffset
+    let displayWidth = 128
+    let displayHeight = 64
 
     function command(cmd: number) {
         let buf = pins.createBuffer(1)
@@ -35,10 +37,9 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
 
-    function clear(){
+    function clear() {
         charX = xOffset
         charY = yOffset
-
     }
 
     export function init(width: number, height: number) {
@@ -84,6 +85,8 @@ namespace OLED {
 
         command(SSD1306_DISPLAYON);
 
+        displayWidth = width
+        displayHeight = height
         clear()
 
     }
