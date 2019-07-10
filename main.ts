@@ -1,6 +1,5 @@
 namespace OLED {
 
-    const SSD1306_COMMAND = 0x00
     const SSD1306_SETCONTRAST = 0x81
     const SSD1306_DISPLAYALLON_RESUME = 0xA4
     const SSD1306_DISPLAYALLON = 0xA5
@@ -26,14 +25,13 @@ namespace OLED {
     const chipAdress = 0x3C
 
     function command(cmd: number) {
-        let buf = pins.createBuffer(2)
-        buf[0] = SSD1306_COMMAND
-        buf[1] = cmd
+        let buf = pins.createBuffer(1)
+        buf[0] = cmd
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
 
-    function drawPixel(x: number, y: number, color: number){
-        
+    function drawPixel(x: number, y: number, color: number) {
+
     }
 
     export function init(width: number, height: number) {
