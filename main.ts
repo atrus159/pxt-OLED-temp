@@ -1,6 +1,8 @@
 namespace OLED {
 
     const SSD1306_SETCONTRAST = 0x81
+    const SSD1306_SETCOLUMNADRESS = 0x21
+    const SSD1306_SETPAGEADRESS = 0x22
     const SSD1306_DISPLAYALLON_RESUME = 0xA4
     const SSD1306_DISPLAYALLON = 0xA5
     const SSD1306_NORMALDISPLAY = 0xA6
@@ -38,6 +40,25 @@ namespace OLED {
     }
 
     function clear() {
+        let buf = pins.createBuffer(3)
+        buf[0] = SSD1306_SETCOLUMNADRESS
+        buf[1] = 0x00
+        buf[2] = displayWidth - 1
+        pins.i2cWriteBuffer(chipAdress, buf, false)
+        buf[0] = SSD1306_SETPAGEADRESS
+        buf[1] = 0x00
+        buf[2] = displayHeight - 1
+        pins.i2cWriteBuffer(chipAdress, buf, false)
+
+        let data = pins.createBuffer(1)
+        for (let i = 0; i < displayWidth / 8; i++) {
+            for (let j = 0; j < displayHeight / 8; j++) {
+                data[0] = 0x00
+                let endWidth = (i === (displayWidth / 8) - 1)
+                let endHeight = (j === (displayHeight / 8) - 1)
+                pins.i2cWriteBuffer(chipAdress, buf, !endWidth || !endHeight)
+            }
+        }
         charX = xOffset
         charY = yOffset
     }
