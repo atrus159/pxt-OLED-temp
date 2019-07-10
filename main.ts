@@ -32,6 +32,9 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
 
+    function drawPixel(x: number, y: number, color: number){
+        
+    }
 
     export function init(width: number, height: number) {
 
@@ -59,7 +62,7 @@ namespace OLED {
         command(SSD1306_COMSCANDEC);
 
         command(SSD1306_SETCOMPINS);
-        command(0x12);        // TODO - calculate based on _rawHieght ?
+        command(0x12);
 
         command(SSD1306_SETCONTRAST);
         command(0xCF);
