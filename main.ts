@@ -23,6 +23,11 @@ namespace OLED {
     const SSD1306_CHARGEPUMP = 0x8D
 
     const chipAdress = 0x3C
+    const xOffset = 0x00
+    const yOffset = 0x00
+
+    let charX = xOffset
+    let charY = yOffset
 
     function command(cmd: number) {
         let buf = pins.createBuffer(1)
@@ -30,7 +35,9 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
 
-    function drawPixel(x: number, y: number, color: number) {
+    function clear(){
+        charX = xOffset
+        charY = yOffset
 
     }
 
@@ -76,6 +83,8 @@ namespace OLED {
         command(SSD1306_NORMALDISPLAY);
 
         command(SSD1306_DISPLAYON);
+
+        clear()
 
     }
 } 
