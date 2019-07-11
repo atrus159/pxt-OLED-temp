@@ -31,40 +31,50 @@ namespace OLED {
     let charX = xOffset
     let charY = yOffset
     let displayWidth = 128
-    let displayHeight = 64
+    let displayHeight = 64 / 8
+    let bufferSize = 0
+    let displayBuffer: Buffer
 
     function command(cmd: number) {
-        let buf = pins.createBuffer(1)
-        buf[0] = cmd
+        let buf = pins.createBuffer(2)
+        buf[0] = 0x00
+        buf[1] = cmd
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
 
-    function clear() {
-        let buf = pins.createBuffer(3)
-        buf[0] = SSD1306_SETCOLUMNADRESS
-        buf[1] = 0x00
-        buf[2] = displayWidth - 1
-        pins.i2cWriteBuffer(chipAdress, buf, false)
-        buf[0] = SSD1306_SETPAGEADRESS
-        buf[1] = 0x00
-        buf[2] = displayHeight - 1
-        pins.i2cWriteBuffer(chipAdress, buf, false)
+    function updateDisplay() {
+        if (typeof displayBuffer != undefined) {
+            command(SSD1306_SETCOLUMNADRESS)
+            command(0x00)
+            command(displayWidth - 1)
+            command(SSD1306_SETPAGEADRESS)
+            command(0x00)
+            command(displayHeight - 1)
 
-        let data = pins.createBuffer(1)
-        for (let i = 0; i < displayWidth / 8; i++) {
-            for (let j = 0; j < displayHeight / 8; j++) {
-                data[0] = 0x00
-                let endWidth = (i === (displayWidth / 8) - 1)
-                let endHeight = (j === (displayHeight / 8) - 1)
-                pins.i2cWriteBuffer(chipAdress, buf, !endWidth || !endHeight)
+            let data = pins.createBuffer(17);
+            data[0] = 0x40; // Data Mode
+
+            // send display buffer in 16 byte chunks
+            for (let i = 0; i < bufferSize; i += 16) {
+                for (let j = 1; j < 17; j++) {
+                    data[j] = displayBuffer[i + j - 1];
+                }
+                pins.i2cWriteBuffer(chipAdress, data, false)
             }
         }
+
+    }
+
+    export function clear() {
+        for (let i = 0; i < bufferSize; i++) {
+            displayBuffer[i] = 0x00
+        }
+        updateDisplay()
         charX = xOffset
         charY = yOffset
     }
 
     export function init(width: number, height: number) {
-
 
         command(SSD1306_DISPLAYOFF);
         command(SSD1306_SETDISPLAYCLOCKDIV);
@@ -107,7 +117,9 @@ namespace OLED {
         command(SSD1306_DISPLAYON);
 
         displayWidth = width
-        displayHeight = height
+        displayHeight = height / 8
+        bufferSize = displayWidth * displayHeight
+        displayBuffer = pins.createBuffer(bufferSize)
         clear()
 
     }
