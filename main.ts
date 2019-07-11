@@ -1,6 +1,6 @@
 //% color="#00CC99"
 namespace OLED {
-    
+
     /*const font = [
         0x00, 0x00, 0x00, 0x00, 0x00,
         0x3E, 0x5B, 0x4F, 0x5B, 0x3E,
@@ -292,7 +292,7 @@ namespace OLED {
     let displayWidth = 128
     let displayHeight = 64 / 8
     let screenSize = 0
-    let textBuffer = ""
+    let screenBuffer = [[0x00]]
 
 
     function command(cmd: number) {
@@ -427,6 +427,7 @@ namespace OLED {
         displayWidth = width
         displayHeight = height / 8
         screenSize = displayWidth * displayHeight
+        screenBuffer.push([0x00])
         clear(false)
 
     }
