@@ -1,3 +1,4 @@
+//% color="#00CC99"
 namespace OLED {
 
     const SSD1306_SETCONTRAST = 0x81
@@ -42,30 +43,35 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
 
-    function updateDisplay() {
-        if (typeof displayBuffer != undefined) {
-            command(SSD1306_SETCOLUMNADRESS)
-            command(0x00)
-            command(displayWidth - 1)
-            command(SSD1306_SETPAGEADRESS)
-            command(0x00)
-            command(displayHeight - 1)
-
-            let data = pins.createBuffer(17);
-            data[0] = 0x40; // Data Mode
-
-            // send display buffer in 16 byte chunks
-            for (let i = 0; i < bufferSize; i += 16) {
-                for (let j = 1; j < 17; j++) {
-                    data[j] = displayBuffer[i + j - 1];
-                }
-                pins.i2cWriteBuffer(chipAdress, data, false)
-            }
+    //% block
+    export function updateDisplay() {
+        if (typeof displayBuffer === undefined) {
+            return
         }
+        command(SSD1306_SETCOLUMNADRESS)
+        command(0x00)
+        command(displayWidth - 1)
+        command(SSD1306_SETPAGEADRESS)
+        command(0x00)
+        command(displayHeight - 1)
 
+        let data = pins.createBuffer(17);
+        data[0] = 0x40; // Data Mode
+
+        // send display buffer in 16 byte chunks
+        for (let i = 0; i < bufferSize; i += 16) {
+            for (let j = 1; j < 17; j++) {
+                data[j] = displayBuffer[i + j - 1];
+            }
+            pins.i2cWriteBuffer(chipAdress, data, false)
+        }
     }
 
+    //% block
     export function clear() {
+        if (typeof displayBuffer === undefined) {
+            return
+        }
         for (let i = 0; i < bufferSize; i++) {
             displayBuffer[i] = 0x00
         }
@@ -74,6 +80,23 @@ namespace OLED {
         charY = yOffset
     }
 
+    //% block
+    export function fill() {
+        if (typeof displayBuffer === undefined) {
+            return
+        }
+        for (let i = 0; i < bufferSize; i++) {
+            displayBuffer[i] = 0xFF
+        }
+        updateDisplay()
+        charX = xOffset
+        charY = yOffset
+    }
+
+
+    //% block
+    //% width.defl=128
+    //% height.defl=64
     export function init(width: number, height: number) {
 
         command(SSD1306_DISPLAYOFF);
