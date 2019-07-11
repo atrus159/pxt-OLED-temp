@@ -257,7 +257,6 @@ namespace OLED {
         0x00, 0x19, 0x1D, 0x17, 0x12,
         0x00, 0x3C, 0x3C, 0x3C, 0x3C,
         0x00, 0x00, 0x00, 0x00, 0x00]*/
-    let font = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
 
 
     const SSD1306_SETCONTRAST = 0x81
@@ -294,6 +293,7 @@ namespace OLED {
     let displayHeight = 64 / 8
     let screenSize = 0
     let textBuffer = ""
+
 
     function command(cmd: number) {
         let buf = pins.createBuffer(2)
@@ -353,7 +353,11 @@ namespace OLED {
     }
 
     //% block
+    let OLEDfont = [0x00, 0x00, 0x00]
+
+
     export function drawChar(x: number, y: number, c: string) {
+
         command(SSD1306_SETCOLUMNADRESS)
         command(x)
         command(x + 5)
@@ -367,7 +371,7 @@ namespace OLED {
                 line[1] = 0x00
             } else {
                 let charIndex = c.charCodeAt(0)
-                line[1] = font[charIndex * 5 + i]
+                line[1] = OLEDfont[charIndex * 5 + i]
             }
             pins.i2cWriteBuffer(chipAdress, line, false)
         }
