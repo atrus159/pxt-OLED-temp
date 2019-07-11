@@ -1,7 +1,7 @@
 //% color="#00CC99"
 namespace OLED {
-
-    /*let font = [
+    
+    /*const font = [
         0x00, 0x00, 0x00, 0x00, 0x00,
         0x3E, 0x5B, 0x4F, 0x5B, 0x3E,
         0x3E, 0x6B, 0x4F, 0x6B, 0x3E,
@@ -352,11 +352,10 @@ namespace OLED {
         }
     }
 
+
     //% block
-    let OLEDfont = [0x00, 0x00, 0x00]
-
-
     export function drawChar(x: number, y: number, c: string) {
+
 
         command(SSD1306_SETCOLUMNADRESS)
         command(x)
@@ -371,7 +370,7 @@ namespace OLED {
                 line[1] = 0x00
             } else {
                 let charIndex = c.charCodeAt(0)
-                line[1] = OLEDfont[charIndex * 5 + i]
+                //line[1] = font[charIndex * 5 + i]
             }
             pins.i2cWriteBuffer(chipAdress, line, false)
         }
