@@ -61,7 +61,7 @@ namespace OLED {
         // send display buffer in 16 byte chunks
         for (let i = 0; i < bufferSize; i += 16) {
             for (let j = 1; j < 17; j++) {
-                data[j] = displayBuffer[i + j - 1];
+                data[j] = 0xFF //displayBuffer[i + j - 1];
             }
             pins.i2cWriteBuffer(chipAdress, data, false)
         }
@@ -73,7 +73,7 @@ namespace OLED {
             return
         }
         for (let i = 0; i < bufferSize; i++) {
-            displayBuffer[i] = 0x00
+            // displayBuffer[i] = 0x00
         }
         updateDisplay()
         charX = xOffset
@@ -86,7 +86,7 @@ namespace OLED {
             return
         }
         for (let i = 0; i < bufferSize; i++) {
-            displayBuffer[i] = 0xFF
+            //displayBuffer[i] = 0xFF
         }
         updateDisplay()
         charX = xOffset
@@ -142,7 +142,7 @@ namespace OLED {
         displayWidth = width
         displayHeight = height / 8
         bufferSize = displayWidth * displayHeight
-        displayBuffer = pins.createBuffer(bufferSize)
+        displayBuffer = pins.createBuffer(1)
         clear()
 
     }
