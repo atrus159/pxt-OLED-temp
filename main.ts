@@ -39,7 +39,7 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
     //% block="clear OLED display"
-    //% weight=5
+    //% weight=6
     export function clear() {
         command(SSD1306_SETCOLUMNADRESS)
         command(0x00)
@@ -89,6 +89,7 @@ namespace OLED {
         newLine()
     }
     //% block="insert newline"
+    //% weight=5
     export function newLine() {
         charY++
         charX = xOffset
