@@ -2,4 +2,9 @@
 
 OLED.init(128, 64)
 OLED.clear(false)
-OLED.drawChar(100, 2, "x")
+OLED.writeString("there's a number after this:")
+OLED.writeNum(26)
+OLED.writeString("foo bar")
+OLED.newLine()
+OLED.writeStringNewLine("This should all be on one line.")
+OLED.writeNumNewLine(69)

@@ -24,13 +24,14 @@ namespace OLED {
     const SSD1306_SEGREMAP = 0xA0
     const SSD1306_CHARGEPUMP = 0x8D
     const chipAdress = 0x3C
-    const xOffset = 0x00
-    const yOffset = 0x00
-    let charX = xOffset
-    let charY = yOffset
+    const xOffset = 0
+    const yOffset = 0
+    let charX = 0
+    let charY = 0
     let displayWidth = 128
     let displayHeight = 64 / 8
     let screenSize = 0
+    let font: Array<Array<number>>
     function command(cmd: number) {
         let buf = pins.createBuffer(2)
         buf[0] = 0x00
@@ -61,8 +62,89 @@ namespace OLED {
         }
     }
     //% block
-    export function drawChar(x: number, y: number, c: string) {
-        const font = [
+    export function writeString(str: string) {
+        for (let i = 0; i < str.length(); i++) {
+            if (charX > displayWidth - 6) {
+                newLine()
+            }
+            drawChar(charX, charY, str.charAt(i))
+            charX += 6
+        }
+    }
+    //% block
+    export function writeNum(n: number){
+        let numString = n.toString()
+        writeString(numString)
+    }
+    //% block
+    export function writeStringNewLine(str: string){
+        writeString(str)
+        newLine()
+    }
+    export function writeNumNewLine(n: number){
+        writeNum(n)
+        newLine()
+    }
+    //% block
+    export function newLine() {
+        charY++
+        charX = xOffset
+    }
+    function drawChar(x: number, y: number, c: string) {
+        command(SSD1306_SETCOLUMNADRESS)
+        command(x)
+        command(x + 5)
+        command(SSD1306_SETPAGEADRESS)
+        command(y)
+        command(y + 1)
+        let line = pins.createBuffer(2)
+        line[0] = 0x40
+        for (let i = 0; i < 6; i++) {
+            if (i === 5) {
+                line[1] = 0x00
+            } else {
+                let charIndex = c.charCodeAt(0)
+                line[1] = font[charIndex][i]
+            }
+            pins.i2cWriteBuffer(chipAdress, line, false)
+        }
+
+    }
+    //% block
+    //% width.defl=128
+    //% height.defl=64
+    export function init(width: number, height: number) {
+        command(SSD1306_DISPLAYOFF);
+        command(SSD1306_SETDISPLAYCLOCKDIV);
+        command(0x80);                                  // the suggested ratio 0x80
+        command(SSD1306_SETMULTIPLEX);
+        command(0x3F);
+        command(SSD1306_SETDISPLAYOFFSET);
+        command(0x0);                                   // no offset
+        command(SSD1306_SETSTARTLINE | 0x0);            // line #0
+        command(SSD1306_CHARGEPUMP);
+        command(0x14);
+        command(SSD1306_MEMORYMODE);
+        command(0x00);                                  // 0x0 act like ks0108
+        command(SSD1306_SEGREMAP | 0x1);
+        command(SSD1306_COMSCANDEC);
+        command(SSD1306_SETCOMPINS);
+        command(0x12);
+        command(SSD1306_SETCONTRAST);
+        command(0xCF);
+        command(SSD1306_SETPRECHARGE);
+        command(0xF1);
+        command(SSD1306_SETVCOMDETECT);
+        command(0x40);
+        command(SSD1306_DISPLAYALLON_RESUME);
+        command(SSD1306_NORMALDISPLAY);
+        command(SSD1306_DISPLAYON);
+        displayWidth = width
+        displayHeight = height / 8
+        screenSize = displayWidth * displayHeight
+        charX = xOffset
+        charY = yOffset
+        font = [
             [0x00, 0x00, 0x00, 0x00, 0x00],
             [0x3E, 0x5B, 0x4F, 0x5B, 0x3E],
             [0x3E, 0x6B, 0x4F, 0x6B, 0x3E],
@@ -193,7 +275,7 @@ namespace OLED {
             [0x3C, 0x26, 0x23, 0x26, 0x3C],
             [0x1E, 0xA1, 0xA1, 0x61, 0x12],
             [0x3A, 0x40, 0x40, 0x20, 0x7A],
-            [0x38, 0x54, 0x54, 0x55, 0x59],
+            [0x38, 0x54, 0x54, 0x55, 0x59]]/*
             [0x21, 0x55, 0x55, 0x79, 0x41],
             [0x21, 0x54, 0x54, 0x78, 0x41],
             [0x21, 0x55, 0x54, 0x78, 0x40],
@@ -317,59 +399,7 @@ namespace OLED {
             [0x00, 0x1F, 0x01, 0x01, 0x1E],
             [0x00, 0x19, 0x1D, 0x17, 0x12],
             [0x00, 0x3C, 0x3C, 0x3C, 0x3C],
-            [0x00, 0x00, 0x00, 0x00, 0x00]];
-
-        command(SSD1306_SETCOLUMNADRESS)
-        command(x)
-        command(x + 5)
-        command(SSD1306_SETPAGEADRESS)
-        command(y)
-        command(y + 1)
-        let line = pins.createBuffer(2)
-        line[0] = 0x40
-        for (let i = 0; i < 6; i++) {
-            if (i === 5) {
-                line[1] = 0x00
-            } else {
-                let charIndex = c.charCodeAt(0)
-                line[1] = font[charIndex][i]//font[charIndex * 5][i]
-            }
-            pins.i2cWriteBuffer(chipAdress, line, false)
-        }
-
-    }
-    //% block
-    //% width.defl=128
-    //% height.defl=64
-    export function init(width: number, height: number) {
-        command(SSD1306_DISPLAYOFF);
-        command(SSD1306_SETDISPLAYCLOCKDIV);
-        command(0x80);                                  // the suggested ratio 0x80
-        command(SSD1306_SETMULTIPLEX);
-        command(0x3F);
-        command(SSD1306_SETDISPLAYOFFSET);
-        command(0x0);                                   // no offset
-        command(SSD1306_SETSTARTLINE | 0x0);            // line #0
-        command(SSD1306_CHARGEPUMP);
-        command(0x14);
-        command(SSD1306_MEMORYMODE);
-        command(0x00);                                  // 0x0 act like ks0108
-        command(SSD1306_SEGREMAP | 0x1);
-        command(SSD1306_COMSCANDEC);
-        command(SSD1306_SETCOMPINS);
-        command(0x12);
-        command(SSD1306_SETCONTRAST);
-        command(0xCF);
-        command(SSD1306_SETPRECHARGE);
-        command(0xF1);
-        command(SSD1306_SETVCOMDETECT);
-        command(0x40);
-        command(SSD1306_DISPLAYALLON_RESUME);
-        command(SSD1306_NORMALDISPLAY);
-        command(SSD1306_DISPLAYON);
-        displayWidth = width
-        displayHeight = height / 8
-        screenSize = displayWidth * displayHeight
+            [0x00, 0x00, 0x00, 0x00, 0x00]];*/
         clear(false)
     }
 } 
