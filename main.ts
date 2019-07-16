@@ -38,8 +38,8 @@ namespace OLED {
         buf[1] = cmd
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
-    //% block
-    export function clear(white: boolean) {
+    //% block = "clear OLED display"
+    export function clear() {
         command(SSD1306_SETCOLUMNADRESS)
         command(0x00)
         command(displayWidth - 1)
@@ -49,19 +49,16 @@ namespace OLED {
         let data = pins.createBuffer(17);
         data[0] = 0x40; // Data Mode
         for (let i = 1; i < 17; i++) {
-            if (white) {
-                data[i] = 0xFF
-            } else {
-                data[i] = 0x00
-            }
-
+            data[i] = 0x00
         }
         // send display buffer in 16 byte chunks
         for (let i = 0; i < screenSize; i += 16) {
             pins.i2cWriteBuffer(chipAdress, data, false)
         }
+        charX = xOffset
+        charY = yOffset
     }
-    //% block
+    //% block = "show (without newline) string "
     export function writeString(str: string) {
         for (let i = 0; i < str.length(); i++) {
             if (charX > displayWidth - 6) {
@@ -71,21 +68,22 @@ namespace OLED {
             charX += 6
         }
     }
-    //% block
-    export function writeNum(n: number){
+    //% block = "show (without newline) number "
+    export function writeNum(n: number) {
         let numString = n.toString()
         writeString(numString)
     }
-    //% block
-    export function writeStringNewLine(str: string){
+    //% block = "show string"
+    export function writeStringNewLine(str: string) {
         writeString(str)
         newLine()
     }
-    export function writeNumNewLine(n: number){
+    //% block = "show number "
+    export function writeNumNewLine(n: number) {
         writeNum(n)
         newLine()
     }
-    //% block
+    //% block = "insert newline"
     export function newLine() {
         charY++
         charX = xOffset
@@ -110,7 +108,7 @@ namespace OLED {
         }
 
     }
-    //% block
+    //% block = "initialize OLED with width $width height $height"
     //% width.defl=128
     //% height.defl=64
     export function init(width: number, height: number) {
@@ -400,6 +398,6 @@ namespace OLED {
             [0x00, 0x19, 0x1D, 0x17, 0x12],
             [0x00, 0x3C, 0x3C, 0x3C, 0x3C],
             [0x00, 0x00, 0x00, 0x00, 0x00]];*/
-        clear(false)
+        clear()
     }
 } 
