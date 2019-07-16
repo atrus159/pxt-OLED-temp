@@ -39,7 +39,7 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
     //% block="clear OLED display"
-    //% weight=6
+    //% weight=0
     export function clear() {
         command(SSD1306_SETCOLUMNADRESS)
         command(0x00)
@@ -60,7 +60,7 @@ namespace OLED {
         charY = yOffset
     }
     //% block="show (without newline) string $str"
-    //% weight=3
+    //% weight=4
     export function writeString(str: string) {
         for (let i = 0; i < str.length(); i++) {
             if (charX > displayWidth - 6) {
@@ -71,13 +71,13 @@ namespace OLED {
         }
     }
     //% block="show (without newline) number $n"
-    //% weight=4
+    //% weight=3
     export function writeNum(n: number) {
         let numString = n.toString()
         writeString(numString)
     }
     //% block="show string $str"
-    //% weight=1
+    //% weight=5
     export function writeStringNewLine(str: string) {
         writeString(str)
         newLine()
@@ -89,7 +89,7 @@ namespace OLED {
         newLine()
     }
     //% block="insert newline"
-    //% weight=5
+    //% weight=1
     export function newLine() {
         charY++
         charX = xOffset
@@ -117,7 +117,7 @@ namespace OLED {
     //% block="initialize OLED with width $width height $height"
     //% width.defl=128
     //% height.defl=64
-    //% weight=0
+    //% weight=6
     export function init(width: number, height: number) {
         command(SSD1306_DISPLAYOFF);
         command(SSD1306_SETDISPLAYCLOCKDIV);
