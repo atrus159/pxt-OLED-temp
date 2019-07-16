@@ -58,7 +58,7 @@ namespace OLED {
         charX = xOffset
         charY = yOffset
     }
-    //% block="show (without newline) string "
+    //% block="show (without newline) string $str"
     export function writeString(str: string) {
         for (let i = 0; i < str.length(); i++) {
             if (charX > displayWidth - 6) {
@@ -68,17 +68,17 @@ namespace OLED {
             charX += 6
         }
     }
-    //% block="show (without newline) number "
+    //% block="show (without newline) number $n"
     export function writeNum(n: number) {
         let numString = n.toString()
         writeString(numString)
     }
-    //% block="show string"
+    //% block="show string $str"
     export function writeStringNewLine(str: string) {
         writeString(str)
         newLine()
     }
-    //% block="show number "
+    //% block="show number $n"
     export function writeNumNewLine(n: number) {
         writeNum(n)
         newLine()
@@ -108,7 +108,7 @@ namespace OLED {
         }
 
     }
-    //% block = "initialize OLED with width $width height $height"
+    //% block="initialize OLED with width $width height $height"
     //% width.defl=128
     //% height.defl=64
     export function init(width: number, height: number) {
