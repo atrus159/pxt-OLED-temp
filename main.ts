@@ -38,7 +38,7 @@ namespace OLED {
         buf[1] = cmd
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
-    //% block = "clear OLED display"
+    //% block="clear OLED display"
     export function clear() {
         command(SSD1306_SETCOLUMNADRESS)
         command(0x00)
@@ -58,7 +58,7 @@ namespace OLED {
         charX = xOffset
         charY = yOffset
     }
-    //% block = "show (without newline) string "
+    //% block="show (without newline) string "
     export function writeString(str: string) {
         for (let i = 0; i < str.length(); i++) {
             if (charX > displayWidth - 6) {
@@ -68,22 +68,22 @@ namespace OLED {
             charX += 6
         }
     }
-    //% block = "show (without newline) number "
+    //% block="show (without newline) number "
     export function writeNum(n: number) {
         let numString = n.toString()
         writeString(numString)
     }
-    //% block = "show string"
+    //% block="show string"
     export function writeStringNewLine(str: string) {
         writeString(str)
         newLine()
     }
-    //% block = "show number "
+    //% block="show number "
     export function writeNumNewLine(n: number) {
         writeNum(n)
         newLine()
     }
-    //% block = "insert newline"
+    //% block="insert newline"
     export function newLine() {
         charY++
         charX = xOffset
