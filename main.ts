@@ -60,7 +60,7 @@ namespace OLED {
         charY = yOffset
     }
     //% block="show (without newline) string $str"
-    //% weight=4
+    //% weight=3
     export function writeString(str: string) {
         for (let i = 0; i < str.length(); i++) {
             if (charX > displayWidth - 6) {
@@ -71,7 +71,7 @@ namespace OLED {
         }
     }
     //% block="show (without newline) number $n"
-    //% weight=3
+    //% weight=2
     export function writeNum(n: number) {
         let numString = n.toString()
         writeString(numString)
@@ -83,7 +83,7 @@ namespace OLED {
         newLine()
     }
     //% block="show number $n"
-    //% weight=2
+    //% weight=4
     export function writeNumNewLine(n: number) {
         writeNum(n)
         newLine()
