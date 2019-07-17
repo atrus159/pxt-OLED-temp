@@ -119,7 +119,7 @@ namespace OLED {
         }
 
     }
-
+    /*
     function drawShape(pixels: Array<Array<number>>) {
         let x1 = displayWidth
         let y1 = displayHeight * 8
@@ -220,7 +220,7 @@ namespace OLED {
         drawLine(x0, y0, x0, y1)
         drawLine(x1, y0, x1, y1)
     }
-
+    */
     //% block="initialize OLED with width $width height $height"
     //% width.defl=128
     //% height.defl=64
