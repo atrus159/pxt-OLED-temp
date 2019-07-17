@@ -207,7 +207,7 @@ namespace OLED {
         drawShape(pixels)
     }
 
-    //% block="draw a rectangle from |($x0,$y0)|to|($x1,$y1)"
+    //% block="draw rectangle from:|x: $x0 y: $y0 to| x: $x1 y: $y1"
     //% x0.defl=0
     //% y0.defl=0
     //% x1.defl=20
