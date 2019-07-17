@@ -166,7 +166,7 @@ namespace OLED {
         }
     }
 
-    //% block="draw a line from ($x0,$y0) to ($x1,$y1)"
+    //% block="draw a line from    ($x0,$y0) to ($x1,$y1)"
     //% x0.defl=0
     //% y0.defl=0
     //% x1.defl=20
@@ -207,7 +207,7 @@ namespace OLED {
         drawShape(pixels)
     }
 
-    //% block="draw a rectangle from ($x0,$y0) to ($x1,$y1)"
+    //% block="draw a rectangle from    ($x0,$y0) to ($x1,$y1)"
     //% x0.defl=0
     //% y0.defl=0
     //% x1.defl=20
