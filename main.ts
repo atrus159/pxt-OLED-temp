@@ -41,7 +41,7 @@ namespace OLED {
         pins.i2cWriteBuffer(chipAdress, buf, false)
     }
     //% block="clear OLED display"
-    //% weight=2
+    //% weight=3
     export function clear() {
         loadStarted = false
         loadPercent = 0
@@ -123,12 +123,13 @@ namespace OLED {
         loadPercent = num
     }
 
-    //% block="draw loading bar at $percent /%"
+    //% block="draw loading bar at $percent percent"
     //% percent.min=0 percent.max=100
-    export function drawLoading(percent: number){
-        if(loadStarted){
+    //% weight=2
+    export function drawLoading(percent: number) {
+        if (loadStarted) {
             drawLoadingBar(percent)
-        }else{
+        } else {
             drawLoadingFrame()
             drawLoadingBar(percent)
             loadStarted = true
@@ -137,7 +138,7 @@ namespace OLED {
 
 
     //% block="show (without newline) string $str"
-    //% weight=5
+    //% weight=6
     export function writeString(str: string) {
         for (let i = 0; i < str.length(); i++) {
             if (charX > displayWidth - 6) {
@@ -148,25 +149,25 @@ namespace OLED {
         }
     }
     //% block="show (without newline) number $n"
-    //% weight=4
+    //% weight=5
     export function writeNum(n: number) {
         let numString = n.toString()
         writeString(numString)
     }
     //% block="show string $str"
-    //% weight=7
+    //% weight=8
     export function writeStringNewLine(str: string) {
         writeString(str)
         newLine()
     }
     //% block="show number $n"
-    //% weight=6
+    //% weight=7
     export function writeNumNewLine(n: number) {
         writeNum(n)
         newLine()
     }
     //% block="insert newline"
-    //% weight=3
+    //% weight=4
     export function newLine() {
         charY++
         charX = xOffset
@@ -299,7 +300,7 @@ namespace OLED {
     //% block="initialize OLED with width $width height $height"
     //% width.defl=128
     //% height.defl=64
-    //% weight=8
+    //% weight=9
     export function init(width: number, height: number) {
         command(SSD1306_DISPLAYOFF);
         command(SSD1306_SETDISPLAYCLOCKDIV);
