@@ -123,7 +123,7 @@ namespace OLED {
         loadPercent = num
     }
 
-    //% block="draw loading bar at $percent %"
+    //% block="draw loading bar at $percent /%"
     //% percent.min=0 percent.max=100
     export function drawLoading(percent: number){
         if(loadStarted){
